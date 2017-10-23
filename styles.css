@@ -1,0 +1,19 @@
+html {
+    font-family: "Lucida Sans", sans-serif;
+}
+
+header {
+    text-align: center;
+}
+
+footer {
+    text-align: center;
+}
+
+h1 {
+    font-size: 100%;
+}
+
+input[type=text] {
+    width: 200px;
+}

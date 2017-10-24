@@ -15,29 +15,25 @@
 <div class="flex-container">
 	<header>
 		<h1>SkillsThis</h1>
-		<form id="runSearch" action="javascript:runSearch()">
-            <label>Terms:</label>
-            <input type="text" id="runSearchTerms" value="DevOps Engineer" required>
-            <label>Location:</label>
-            <input type="text" id="runSearchLocation" value="San Rafael, CA" required>
-            <input type="submit">
-		</form>	
+        <label>Terms:</label>
+        <input type="text" id="runSearchTerms" value="DevOps Engineer" required>
+        <label>Location:</label>
+        <input type="text" id="runSearchLocation" value="San Rafael, CA" required>
+        <button onclick="runSearch(document.getElementById('runSearchTerms').value,document.getElementById('runSearchLocation').value)">submit</button>
 	</header>
-	<div class="articles">
-        <article class="article">
+	<main id=results class="results">
+        <article>
             <div>Title - Source</div>
             <div>Summary Block</div>
             <div>Description</div>
         </article>
-        <article class="article">
+        <article>
                 <div>Title - Source</div>
                 <div>Summary Block</div>
                 <div>Description</div>
         </article>
-    </div>
+    </main>
 	<!-- <footer>Copyright &copy; John Ayers</footer> -->	
 </div>
-
-
 </body>
 </html> 

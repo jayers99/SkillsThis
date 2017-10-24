@@ -1,9 +1,19 @@
 html {
     font-family: "Lucida Sans", sans-serif;
+    max-width: 1024px;
+    margin: 0 auto;
 }
 
 header {
     text-align: center;
+    background-color: #eee;
+    padding: 10px;
+}
+
+article {
+    border: 1px solid lightgray;
+    padding: 5px;    
+    -webkit-margin-after: 5px;
 }
 
 footer {
@@ -11,9 +21,18 @@ footer {
 }
 
 h1 {
-    font-size: 100%;
+    font-size: 1.25em;
+    -webkit-margin-before: 0em;
+    -webkit-margin-after: 0.25em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
 }
 
 input[type=text] {
     width: 200px;
+}
+
+.articles {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }

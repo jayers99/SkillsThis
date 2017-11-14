@@ -1,0 +1,10 @@
+word count from indeed local
+move to cloud
+
+add linkedin
+add dice
+add glassdoor
+add simplied hired
+add career builder
+
+create word classifier

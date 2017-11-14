@@ -1,0 +1,54 @@
+modules
+collect site searches
+	async calls to sitesearch
+	seperate modules for each of the sites
+	take the search terms
+	sitesearch (foreach of the sites)
+		submits the search and goes through all the pages
+		creates a collection of job objects wiht just the raw data
+			maybe jobListingRaw
+		then pass the entire collection to the jobListRawProcessor 
+	jobListingRawCollection processor
+once all async calls have returned searchprocess
+	iterate through all the jobs and sum them up
+collect all the job collection from the site search module async calls
+storesearch
+display the results
+
+search module
+n number of site modules
+job collection processor module
+
+
+call search
+call n number of site search functions
+site search function
+	submit query
+	get first page and add all jobs to the getjob q
+	get the next page
+	page through all pages
+	pass collection of rawjobobjects to
+		sometimes it links directly to the company site
+	job collection processor
+	return results to search module
+sum up the search
+store results
+display results
+
+
+jobobject
+source
+link
+summary
+fullhtml
+keywords
+payrange
+company
+title
+postdate
+location
+desired experience
+reviews
+posted days ago
+
+

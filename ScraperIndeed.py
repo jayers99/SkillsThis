@@ -24,8 +24,9 @@ def main(terms, loc):
     urllib.request.install_opener(opener)
     resp = opener.open(requrl)
     udata = resp.read().decode('utf-8')
-    asciidata=udata.encode("ascii","ignore")
-    print(asciidata)
+    
+    #asciidata=udata.encode("ascii","ignore")
+    #print(asciidata)
 
 if __name__ == "__main__":
     main('DevOps Engineer', 'San Rafael, CA')

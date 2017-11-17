@@ -37,18 +37,24 @@ display results
 
 
 jobobject
+----------------------
 source
-link
-summary
-fullhtml
-keywords
-payrange
-company
-title
+#source vender id
+searchid
+search date
+link calc
+title calc
+summary html
+full job html
+-----
 postdate
-location
-desired experience
-reviews
 posted days ago
-
+company
+location
+reviews
+payrange
+-----
+desired experience
+keywords
+sentiment
 

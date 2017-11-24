@@ -12,9 +12,10 @@ tweak up the headers to look like real browser
 create word classifier
 
 
+the numbers
+570 jobs
+73 http errors
+80 bummer page
 
-ones that take a long time
-6
-61
-68
+yeild is about 75% of the jobs
 

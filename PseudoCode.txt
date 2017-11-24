@@ -58,3 +58,10 @@ desired experience
 keywords
 sentiment
 
+
+
+nlp for each job post
+pull just the body
+remove all the link text
+remove any footer stuff
+remove all the code

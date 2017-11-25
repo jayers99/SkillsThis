@@ -105,6 +105,7 @@ for idx, jobpost in enumerate(errorresults):
 
 #function to get just visible text
 #https://stackoverflow.com/questions/1936466/beautifulsoup-grab-visible-webpage-text
+from bs4.element import Comment
 def tag_visible(element):
     if element.parent.name in ['style', 'script', 'head', 'title', 'meta', '[document]']:
         return False
@@ -112,28 +113,26 @@ def tag_visible(element):
         return False
     return True
 
-def text_from_html(body):
-    soup = BeautifulSoup(body, 'html.parser')
-    texts = soup.findAll(text=True)
-    visible_texts = filter(tag_visible, texts)  
+def text_from_html(passedsoup):
+    texts = passedsoup.findAll(text=True)
+    visible_texts = filter(tag_visible, texts)
     return u" ".join(t.strip() for t in visible_texts)
 
 
 #parse a lot of the junk out of a single saved html file
 from bs4 import BeautifulSoup
-filepath = r"/Users/jayers/Temp/Jobpost001.html"
+filepath = r"/Users/jayers/Temp/Jobpost003.html"
+print(filepath)
 page = open(filepath, encoding='utf-8', errors='ignore')
-soup = BeautifulSoup(page.read(), "html5lib")
-body = soup.find('body')
-[x.extract() for x in body.findAll('a')]
-[x.extract() for x in body.findAll('script')]
-newfilepath = os.path.dirname(filepath) + "/{0}.{2}.{1}".format(*os.path.basename(filepath).split('.') + ['body'])
-with open(newfilepath, "w") as file:
-    file.write(str(body.prettify()))
+soup = BeautifulSoup(page, 'html5lib')
+jobsummary = soup.find("span", {"id": "job_summary"})
+if jobsummary is not None:
+    soup = jobsummary
 
-newfilepath = os.path.dirname(filepath) + "/{0}.{2}".format(*os.path.basename(filepath).split('.') + ['body.txt'])
+#print(text_from_html(page))
+newfilepath = os.path.dirname(filepath) + "/{0}.{2}".format(*os.path.basename(filepath).split('.') + ['txt'])
 with open(newfilepath, "w") as file:
-    file.write(str(body.text))
+    file.write(str(text_from_html(soup)))
 
 #looping name conflict check
 for filepath in glob.glob("/Users/jayers/Temp/Jobpost[0-9][0-9][0-9].html"):
@@ -148,20 +147,17 @@ for filepath in glob.glob("/Users/jayers/Temp/Jobpost[0-9][0-9][0-9].html"):
 import glob, os
 for filepath in glob.glob("/Users/jayers/Temp/Jobpost[0-9][0-9][0-9].html"):
     print(filepath)
-    url = filepath
-    page = open(url, encoding='utf-8', errors='ignore')
-    soup = BeautifulSoup(page.read(), "html5lib")
-    body = soup.find('body')
-    [x.extract() for x in body.findAll('a')]
-    [x.extract() for x in body.findAll('script')]
-    [x.extract() for x in body.findAll('style')]
-    newfilepath = os.path.dirname(filepath) + "/{0}.{2}.{1}".format(*os.path.basename(filepath).split('.') + ['body'])
+    page = open(filepath, encoding='utf-8', errors='ignore')
+    soup = BeautifulSoup(page, 'html5lib')
+    jobsummary = soup.find("span", {"id": "job_summary"})
+    if jobsummary is not None:
+        soup = jobsummary
+        print("job summary found")
+        
+    newfilepath = os.path.dirname(filepath) + "/{0}.{2}".format(*os.path.basename(filepath).split('.') + ['txt'])
     with open(newfilepath, "w") as file:
-        file.write(str(body.prettify()))
-    
-    newfilepath = os.path.dirname(filepath) + "/{0}.{2}".format(*os.path.basename(filepath).split('.') + ['body.txt'])
-    with open(newfilepath, "w") as file:
-        file.write(str(body.text))
+        file.write(str(text_from_html(soup)))
+
 
 
 

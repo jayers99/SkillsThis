@@ -29,11 +29,14 @@ from string import punctuation
 # needed to install some nltk stuff
 nltk.download('punkt')
 nltk.download('stopwords')
+
 sents = sent_tokenize(concatstring)
 words = word_tokenize(concatstring.lower())
 _stopwords = set(stopwords.words('english') + list(punctuation))
 words=[word for word in words if word not in _stopwords]
 print("\n".join(words))
+
+#let's add stemming
 
 from nltk.probability import FreqDist
 freq = FreqDist(words)
@@ -78,4 +81,10 @@ for k, v in s[:500]:
     linestr = "{}, {}\n".format(k, v)
     with open("/Users/jayers/Temp/freqdistwords.csv", "a") as myfile:
         myfile.write(linestr)
+
+
+
+
+# let's see home many clusters the pages fall into
+# it might make sense to create templates to filter out all the garbage
 

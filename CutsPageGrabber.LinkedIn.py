@@ -1,6 +1,4 @@
 import sys
-import urllib.request
-import ssl
 from bs4 import BeautifulSoup
 import os
 print(sys.version, end='\n\n')
@@ -10,26 +8,143 @@ https://www.linkedin.com/jobs/search/?keywords=devops%20engineer&location=San%20
 https://www.linkedin.com/jobs/search/?keywords=devops%20engineer&location=San%20Rafael%2C%20California&locationId=PLACES.us.7-1-0-21-22&start=25
 https://www.linkedin.com/jobs/view/464597740/
 
-requrl = "https://www.linkedin.com/jobs/search/?keywords=devops%20engineer&location=San%20Rafael%2C%20California&locationId=PLACES.us.7-1-0-21-22"
-print(requrl)
-https_sslv3_handler = urllib.request.HTTPSHandler(context=ssl.SSLContext(ssl.PROTOCOL_SSLv23))
-opener = urllib.request.build_opener(https_sslv3_handler)
-urllib.request.install_opener(opener)
-resp = opener.open(requrl)
-udata = resp.read().decode('utf-8')
-soup = BeautifulSoup(udata, "html5lib")
+# try using the requests lib
+import requests
+headers = {
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'accept-encoding': 'gzip, deflate, br',
+    'accept-language': 'en-US,en;q=0.9',
+    'cache-control': 'max-age=0',
+    'referer': 'https://www.linkedin.com/',
+    'upgrade-insecure-requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
+    }
 
-searchtitle = soup.find_all("title")
-searchcountelement = soup.select_one("#searchCount")
-searchcounttext = searchcountelement.text.strip()
-searchcountnum = int(searchcounttext.split()[-1])
-#next page link didn't work
-#soup.select_one(".np").parent.parent["href"]
-# for some reason this data-pp grab is failing now
-# + "&pp=" + soup.select_one(".np").parent.parent["data-pp"]
-#soup.select_one(".np").parent.parent["href"]
+basesearchurl = "https://www.linkedin.com/jobs/search/"
+payload = {'keywords': 'devops engineer', 'location': 'San Rafael, California', 'locationId': 'PLACES.us.7-1-0-21-22'}
+cookies = {
+    "bcookie":"v=2&7ccadf5c-f645-45e8-85d4-cdb35b4b041b",
+    "bscookie":"v=1&20170712222207b024f77c-59e4-4db9-812c-e65946e039d4AQG-rjuWQ28BC6rJMyAI_Cc4iqdn9vRh",
+    "visit":"v=1&M",
+    "sl":"v=1&65ShK",
+    "liap":"true",
+    "li_at":"AQEDAQD2XMgFYblAAAABX_9u6ZAAAAFgI3ttkFYAuLA4rwXDVfMtCL9aOWHdbLr31wfA0Jplppk3RFlncV2vDj9PiOttmSc1z0pqEDg6RqWVANnJKZsGTVdy_I0WNgxA5_RY4KcgXA2t62RI6Meo8Xoj",
+    "JSESSIONID":"ajax:8513822846118758376",
+    "lang":"v=2&lang=en-us",
+    "_ga":"GA1.2.1396653397.1511818507",
+    "_gat":"1",
+    "_lipt":"wEAAAFgCpf01tekOhoeXP9SoAh8TQovR1HCuB5MFMhea6D0RzdWAGEjEtbcuT9LBGY6acr8tgZQZl5hIUzS4463VYE2xnBuSLEMcHCPupzjU4HvwCM4YPSEkit82qPrxUy-_f86LZdzrTP7-_MUeq2Kv4cTjHJeOMz_HNoD6vyxqZ3QP4kZikvg-VyhsqlFgA-ux195trvf8PKcHxik4g_3Mptv5AdIwp3p_nwOkequAwJ0ddeEhL9pcq3HqTB2TN5XUzh1B6LBkW_zAK0kRnd8GKPYC110P_fXKEKdKW4VMmN6aEdFUY1_rcd8tr7ElVNTx6WjeoGOWWvqzSLvWrAGX5V_VNT80B1FfcNjwL5MxIJ5pw1YeZ0",
+    "lidc":"b=OB08:g=664:u=197:i=1512006277:t=1512084706:s=AQHYM04HIXMrAjFr4z2D3Ual3UCeVxi6"
+}
+cookies = {
+    "bcookie":"v=2&7ccadf5c-f645-45e8-85d4-cdb35b4b041b",
+    "bscookie":"v=1&20170712222207b024f77c-59e4-4db9-812c-e65946e039d4AQG-rjuWQ28BC6rJMyAI_Cc4iqdn9vRh",
+    "visit":"v=1&M",
+    "sl":"v=1&65ShK",
+    "liap":"true",
+    "li_at":"AQEDAQD2XMgFYblAAAABX_9u6ZAAAAFgI3ttkFYAuLA4rwXDVfMtCL9aOWHdbLr31wfA0Jplppk3RFlncV2vDj9PiOttmSc1z0pqEDg6RqWVANnJKZsGTVdy_I0WNgxA5_RY4KcgXA2t62RI6Meo8Xoj",
+    "JSESSIONID":"ajax:8513822846118758376",
+    "lang":"v=2&lang=en-us",
+    "_ga":"GA1.2.1396653397.1511818507",
+    "_lipt":"wEAAAFgCpf01tekOhoeXP9SoAh8TQovR1HCuB5MFMhea6D0RzdWAGEjEtbcuT9LBGY6acr8tgZQZl5hIUzS4463VYE2xnBuSLEMcHCPupzjU4HvwCM4YPSEkit82qPrxUy-_f86LZdzrTP7-_MUeq2Kv4cTjHJeOMz_HNoD6vyxqZ3QP4kZikvg-VyhsqlFgA-ux195trvf8PKcHxik4g_3Mptv5AdIwp3p_nwOkequAwJ0ddeEhL9pcq3HqTB2TN5XUzh1B6LBkW_zAK0kRnd8GKPYC110P_fXKEKdKW4VMmN6aEdFUY1_rcd8tr7ElVNTx6WjeoGOWWvqzSLvWrAGX5V_VNT80B1FfcNjwL5MxIJ5pw1YeZ0",
+    "lidc":"b=OB08:g=664:u=197:i=1512006277:t=1512084706:s=AQHYM04HIXMrAjFr4z2D3Ual3UCeVxi6"
+}
+#bcookie="v=2&7ccadf5c-f645-45e8-85d4-cdb35b4b041b"; bscookie="v=1&20170712222207b024f77c-59e4-4db9-812c-e65946e039d4AQG-rjuWQ28BC6rJMyAI_Cc4iqdn9vRh"; visit="v=1&M"; sl="v=1&65ShK"; liap=true; li_at=AQEDAQD2XMgFYblAAAABX_9u6ZAAAAFgI3ttkFYAuLA4rwXDVfMtCL9aOWHdbLr31wfA0Jplppk3RFlncV2vDj9PiOttmSc1z0pqEDg6RqWVANnJKZsGTVdy_I0WNgxA5_RY4KcgXA2t62RI6Meo8Xoj; JSESSIONID="ajax:8513822846118758376"; lang="v=2&lang=en-us"; _ga=GA1.2.1396653397.1511818507; _gat=1; _lipt=CwEAAAFgCpf01tekOhoeXP9SoAh8TQovR1HCuB5MFMhea6D0RzdWAGEjEtbcuT9LBGY6acr8tgZQZl5hIUzS4463VYE2xnBuSLEMcHCPupzjU4HvwCM4YPSEkit82qPrxUy-_f86LZdzrTP7-_MUeq2Kv4cTjHJeOMz_HNoD6vyxqZ3QP4kZikvg-VyhsqlFgA-ux195trvf8PKcHxik4g_3Mptv5AdIwp3p_nwOkequAwJ0ddeEhL9pcq3HqTB2TN5XUzh1B6LBkW_zAK0kRnd8GKPYC110P_fXKEKdKW4VMmN6aEdFUY1_rcd8tr7ElVNTx6WjeoGOWWvqzSLvWrAGX5V_VNT80B1FfcNjwL5MxIJ5pw1YeZ0; lidc="b=OB08:g=664:u=197:i=1512006277:t=1512084706:s=AQHYM04HIXMrAjFr4z2D3Ual3UCeVxi6"
+#respsearch = requests.get(basesearchurl, params=payload, headers=headers, cookies=cookies)
 
-jobpostsummaries = soup.find_all(attrs={"data-tn-component": "organicJob"})
+def pretty_print_POST(req):
+    """
+    At this point it is completely built and ready
+    to be fired; it is "prepared".
+
+    However pay attention at the formatting used in 
+    this function because it is programmed to be pretty 
+    printed and may differ from the actual request.
+    """
+    print('{}\n{}\n{}\n\n{}'.format(
+        '-----------START-----------',
+        req.method + ' ' + req.url,
+        '\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
+        req.body,
+    ))
+
+req = requests.Request('GET', basesearchurl, params=payload, headers=headers)
+prepared = req.prepare()
+
+pretty_print_POST(prepared)
+
+respsearch = requests.get(basesearchurl, params=payload, headers=headers)
+respsearch
+respsearch.cookies
+with open('/Users/jayers/Temp/atest.html', 'w') as file:
+    file.write(respsearch.text)
+
+# make some soup
+soupsearch = BeautifulSoup(respsearch.text, "html5lib")
+searchtitle = soupsearch.find_all("title")
+print(searchtitle)
+# linked in uses javascript to ender page
+# pull out the json object with the job listings in it
+codesoup = soupsearch.find("code", {"id": "decoratedJobPostingsModule"})
+codesoup.contents[0]
+
+# turn in into python json object
+import json
+jobsjson = json.loads(codesoup.contents[0])
+# parse out the url for the job listing
+print(jobsjson['elements'][0]['viewJobTextUrl'])
+for job in jobsjson['elements']:
+    print(job['viewJobTextUrl'])
+
+# get full job text
+print(jobsjson['elements'][1]['viewJobTextUrl'])
+respjob = requests.get(jobsjson['elements'][1]['viewJobTextUrl'], headers=headers, cookies=respsearch.cookies)
+respjob
+with open('/Users/jayers/Temp/ajobtest.html', 'w') as file:
+    file.write(respjob.text)
+soupjob = BeautifulSoup(respjob.text, "html5lib")
+codesoupjob = soupjob.find("code", {"id": "jobDescriptionModule"})
+#codesoupjob.contents[0]
+codesoupjob.contents[0]
+jsonjob = json.loads(codesoupjob.contents[0])
+print(jsonjob['description'])
+print(jsonjob['skillsDescription'])
+with open('/Users/jayers/Temp/ajobdesctest.html', 'w') as file:
+    file.write(jsonjob['description'])
+    if jsonjob['skillsDescription'] is not None:
+        file.write(jsonjob['skillsDescription'])
+
+
+# now try to loop through a page of jobs
+for job in jobsjson['elements']:
+    print(job['viewJobTextUrl'])
+    respjob = requests.get(job['viewJobTextUrl'], headers=headers)
+    if respjob.status_code == 999:
+        print("response code 999")
+    else:
+        soupjob = BeautifulSoup(respjob.text, "html5lib")
+        codesoupjob = soupjob.find("code", {"id": "jobDescriptionModule"})
+        jsonjob = json.loads(codesoupjob.contents[0])
+        print(jsonjob['description'])
+        print(jsonjob['skillsDescription'])
+        #with open('/Users/jayers/Temp/ajobstest.html', 'a') as file:
+        with open('d:\Temp\ajobstest.html', 'a') as file:
+            file.write(jsonjob['description'])
+            if jsonjob['skillsDescription'] is not None:
+                file.write(jsonjob['skillsDescription'])
+            file.write('<hr>')
+
+
+
+
+
+
+
+
+
+
+
+
 startnum = 10
 
 while (searchcountnum - startnum > 0): 

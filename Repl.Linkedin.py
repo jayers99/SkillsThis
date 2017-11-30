@@ -3,12 +3,6 @@ import time
 
 browser = webdriver.Chrome("/Applications/chromedriver")
 browser.get("https://linkedin.com")
-loginemail = browser.find_element_by_id("login-email")
-loginemail.send_keys("jayers99@gmail.com")
-loginpass = browser.find_element_by_id("login-password")
-loginpass.send_keys("h95FPXZ%Fqfq")
-loginsubmit = browser.find_element_by_id("login-submit")
-loginsubmit.click()
 url = "https://www.linkedin.com/jobs/search/?keywords=devops%20engineer&location=San%20Rafael%2C%20California&locationId=PLACES.us.7-1-0-21-22"
 browser.get(url)
 time.sleep(3)

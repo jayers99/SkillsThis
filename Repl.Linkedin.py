@@ -133,3 +133,36 @@ for link in links[390:500]:
             file.write('\n</div>')
 
 
+
+
+# convert the html file to text for nlp
+from bs4 import BeautifulSoup
+
+# read the massive 1000 html file, filter it and convert it to text for NLP
+fpath = r"/Users/jayers/Temp/Linkedin1000JobDesctions.html"
+page = open(fpath, encoding='utf-8', errors='ignore')
+soup = BeautifulSoup(page, 'html5lib')
+jobs = soup.select("div.jayers-job")
+
+job1 = jobs[0].select("div.jayers-job-title")
+type(job1)
+job1[0].text.strip()
+
+
+jobdescs = ""
+for i, job in enumerate(jobs):
+    try:
+        jobtitle = job.select("div.jayers-job-title")[0].text.strip()
+        jobcompany = job.select("div.jayers-job-loc a")[0].text.strip()
+        jobdesc = job.select("div.jayers-job-desc")[0].text.strip()
+    except IndexError as ex:
+        print("{}  index error".format(i))
+    else:
+        print("{}  {} - {}".format(i, jobtitle, jobcompany))
+        jobdescs += jobdesc
+
+jobdescs
+
+with open('/Users/jayers/Temp/Linkedin1000JobDesctions.txt', 'w') as file:
+    file.write(jobdescs)
+

@@ -43,12 +43,20 @@ while currentpage < thismanypages:
 print("{} links scraped".format(len(links)))
 with open('/Users/jayers/Temp/alinks.txt', 'w') as file:
     file.write(str(links))
+# reload the links from file
+import ast
+links = []
+with open('/Users/jayers/Temp/alinks.txt', 'r') as file:
+    links = ast.literal_eval(file.read())
+
+links[400:410]
 
 # scrape the job description of the job links
 with open('/Users/jayers/Temp/aJobDesctions.html', 'w') as file:
     file.write(time.strftime("%c"))
 
-for link in links[50:1000]:
+# get the job desc for posts when you are logged on see below for not logged on format
+for link in links[800:1000]:
     print(link)
     try:
         # try to grab the page and extract the data i want
@@ -66,6 +74,9 @@ for link in links[50:1000]:
         print("ERROR: {}".format(ex.msg))
     except exceptions.TimeoutException as ex:
         print("ERROR: {}".format(ex.msg))
+    except KeyboardInterrupt:
+        print('interrupted!')
+        break
     except:
         print("Unexpected ERROR:", sys.exc_info()[0])
     else:
@@ -78,4 +89,47 @@ for link in links[50:1000]:
             file.write('\n<div class="jayers-job-link"><a href="{}" target="_blank">Job Link</a>\n</div>'.format(link))
             file.write('\n<div class="jayers-job-desc">{}\n</div>'.format(jobdescstr))
             file.write('\n</div>')
+
+
+
+with open('/Users/jayers/Temp/aJobDesctionsOldformatTest.html', 'w') as file:
+    file.write(time.strftime("%c"))
+
+# get the job desc for posts when you are not logged on
+for link in links[390:500]:
+    print(link)
+    try:
+        # try to grab the page and extract the data i want
+        browser.get(link)
+        jobtitle = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
+            By.CSS_SELECTOR, "h1.title")))
+        jobcompany = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
+            By.CSS_SELECTOR, "span.company")))
+        jobloc = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
+            By.CSS_SELECTOR, "h3.location")))
+        jobdesc = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
+            By.ID, "div.summary")))
+        jobtitlestr = jobtitle.get_attribute("innerHTML")
+        joblocstr = "{}{}".format(jobcompany.get_attribute("innerHTML"), jobloc.get_attribute("innerHTML"))
+        jobdescstr = jobdesc.get_attribute("innerHTML")
+    except exceptions.NoSuchElementException as ex:
+        print("ERROR: {}".format(ex.msg))
+    except exceptions.TimeoutException as ex:
+        print("ERROR: {}".format(ex.msg))
+    except KeyboardInterrupt:
+        print('interrupted!')
+        break
+    except:
+        print("Unexpected ERROR:", sys.exc_info()[0])
+    else:
+        # write the results to a file
+        with open('/Users/jayers/Temp/aJobDesctions.html', 'a') as file:
+            file.write('\n<br>\n<hr>\n<br>')
+            file.write('\n<div class="jayers-job">')
+            file.write('\n<div class="jayers-job-title">{}\n</div>'.format(jobtitlestr))
+            file.write('\n<div class="jayers-job-loc">{}\n</div>'.format(joblocstr))
+            file.write('\n<div class="jayers-job-link"><a href="{}" target="_blank">Job Link</a>\n</div>'.format(link))
+            file.write('\n<div class="jayers-job-desc">{}\n</div>'.format(jobdescstr))
+            file.write('\n</div>')
+
 

@@ -6,13 +6,12 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import sys
 
-
 # setup the env
 browser = webdriver.Chrome("/Applications/chromedriver")
 
 # loop through n number of job posting pages and build a list of job links
-thismanypages = 20
-currentpage = 10
+thismanypages = 40
+currentpage = 0
 baseurl = "https://www.linkedin.com/jobs/search/?keywords=devops%20engineer&location=San%20Rafael%2C%20California&locationId=PLACES.us.7-1-0-21-22"
 links = []
 
@@ -25,7 +24,7 @@ while currentpage < thismanypages:
     url = "{0}{1}".format(baseurl, startpara)
     print(url)
     browser.get(url)
-    time.sleep(3)
+    time.sleep(4)
     # you must scroll to the bottom of the page for all the items to be loaded
     windowheight = browser.get_window_size()['height']
     innerheight = browser.execute_script("return window.innerHeight")
@@ -40,24 +39,28 @@ while currentpage < thismanypages:
     links += [link.get_attribute("href") for link in linkselements]
     currentpage += 1
 
+# save all those links off to a file
+print("{} links scraped".format(len(links)))
+with open('/Users/jayers/Temp/alinks.txt', 'w') as file:
+    file.write(str(links))
+
 # scrape the job description of the job links
-len(links)
 with open('/Users/jayers/Temp/aJobDesctions.html', 'w') as file:
     file.write(time.strftime("%c"))
 
-for link in links:
+for link in links[50:1000]:
     print(link)
     try:
         # try to grab the page and extract the data i want
         browser.get(link)
         jobtitle = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
             By.CSS_SELECTOR, ".jobs-details-top-card__content-container.mt6.pb5 h1")))
-        #time.sleep(4)
-        #jobtitle = browser.find_element_by_css_selector(".jobs-details-top-card__content-container.mt6.pb5 h1")
+        jobloc = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
+            By.CSS_SELECTOR, ".jobs-details-top-card__content-container.mt6.pb5 h3")))
+        jobdesc = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
+            By.ID, "job-details")))
         jobtitlestr = jobtitle.get_attribute("innerHTML")
-        jobloc = browser.find_element_by_css_selector(".jobs-details-top-card__content-container.mt6.pb5 h3")
         joblocstr = jobloc.get_attribute("innerHTML")
-        jobdesc = browser.find_element_by_id("job-details")
         jobdescstr = jobdesc.get_attribute("innerHTML")
     except exceptions.NoSuchElementException as ex:
         print("ERROR: {}".format(ex.msg))
@@ -76,19 +79,3 @@ for link in links:
             file.write('\n<div class="jayers-job-desc">{}\n</div>'.format(jobdescstr))
             file.write('\n</div>')
 
-
-
-        except as ex:
-        #print("    ERROR Code: {} - {}".format(ex.code, ex.reason))
-
-
-
-
-
-
-
-jobdesc.text
-
-
-next = browser.find_element_by_css_selector("button.next")
-next.click()

@@ -65,3 +65,17 @@ pull just the body
 remove all the link text
 remove any footer stuff
 remove all the code
+
+
+word object
+-------------------
+word
+stem
+pos
+wordsense
+freq
+
+or
+
+stem
+

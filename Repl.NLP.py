@@ -7,6 +7,7 @@ from nltk.probability import FreqDist
 # you might have to install somestuff
 nltk.download('punkt')
 nltk.download('stopwords')
+nltk.download('wordnet')
 
 
 # working with linkedin 1000 job data
@@ -21,17 +22,37 @@ jobdescs
 # i added a \n to as a seperator when i convert from html
 paragraphs = [p.strip() for p in jobdescs.split('\n') if p.strip()]
 # and here, sent_tokenize each one of the paragraphs
-sents[]
+sents = []
 for paragraph in paragraphs:
     sents += sent_tokenize(paragraph)
 
 # extract all the words
-words[]
-for sent in sents:
-    words += word_tokenize(sent.lower())
+_stopwords = set(stopwords.words('english') + list(punctuation))
+words = []
+
+lmtzr = WordNetLemmatizer()
+st = PorterStemmer()
+for sent in sents[0:10]:
+    print(sent)
+    sentwords = word_tokenize(sent)
+    sentwordsPOS = nltk.pos_tag(sentwords)
+    for sentword in sentwordsPOS:
+        if sentword[0] not in _stopwords:
+            if sentword[1][0].lower().replace("j", "a") in ("n", "v", "a", "r"):
+                sentwordsense = lesk(sentwords, sentword[0], sentword[1][0].lower().replace("j", "a"))
+            else:
+                sentwordsense = lesk(sentwords, sentword[0])
+            if sentwordsense is not None:
+                sentwordsense = str(sentwordsense).replace("Synset('", "").replace("')", "")
+            sentwordlm = lmtzr.lemmatize(sentword[0])
+            sentwordst = st.stem(sentword[0])
+            print(sentword[0], sentword[1], sentwordsense, sentwordlm, sentwordst)
+        else:
+            print(sentword[0], sentword[1], "stopword", "stopword", "stopword")
+
+
 
 # take out the stopwords
-_stopwords = set(stopwords.words('english') + list(punctuation))
 words=[word for word in words if word not in _stopwords]
 print("\n".join(words))
 
@@ -45,6 +66,10 @@ from nltk.stem import PorterStemmer
 st = PorterStemmer()
 stemmedWords=[st.stem(word) for word in words]
 words = stemmedWords
+# also a thing called Lemmatization?
+from nltk.stem.wordnet import WordNetLemmatizer
+lmtzr = WordNetLemmatizer()
+lmtzr.lemmatize('cars')
 
 # add parts of speech
 # tag list https://pythonprogramming.net/natural-language-toolkit-nltk-part-speech-tagging/

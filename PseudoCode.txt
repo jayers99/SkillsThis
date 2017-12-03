@@ -79,3 +79,7 @@ or
 
 stem
 
+
+paragraphs
+sentences
+words (word, sense, pos, lem, stem)

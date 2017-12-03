@@ -28,29 +28,39 @@ for paragraph in paragraphs:
 
 # extract all the words
 _stopwords = set(stopwords.words('english') + list(punctuation))
-words = []
 
 lmtzr = WordNetLemmatizer()
 st = PorterStemmer()
-for sent in sents[0:10]:
-    print(sent)
+
+# create a tuple of all the words with 4 word attributes
+# wait for this one to complete for linedin 1000 it will take 10 seconds
+words = list()
+for sent in sents:
+    #print(sent)
     sentwords = word_tokenize(sent)
     sentwordsPOS = nltk.pos_tag(sentwords)
     for sentword in sentwordsPOS:
-        if sentword[0] not in _stopwords:
+        if sentword[0].lower() not in _stopwords:
             if sentword[1][0].lower().replace("j", "a") in ("n", "v", "a", "r"):
                 sentwordsense = lesk(sentwords, sentword[0], sentword[1][0].lower().replace("j", "a"))
             else:
                 sentwordsense = lesk(sentwords, sentword[0])
             if sentwordsense is not None:
-                sentwordsense = str(sentwordsense).replace("Synset('", "").replace("')", "")
+                sentwordsense = str(sentwordsense).replace("Synset('", "").replace("')", "").lower()
             sentwordlm = lmtzr.lemmatize(sentword[0])
             sentwordst = st.stem(sentword[0])
-            print(sentword[0], sentword[1], sentwordsense, sentwordlm, sentwordst)
+            #print(sentword[0], sentword[1], sentwordsense, sentwordlm, sentwordst)
+            wordrow = (sentword[0].lower(), sentword[1], sentwordsense, sentwordlm.lower(), sentwordst.lower())
+            words.append(wordrow)
         else:
-            print(sentword[0], sentword[1], "stopword", "stopword", "stopword")
+            #print(sentword[0], sentword[1], "stopword", "stopword", "stopword")
+            wordrow = (sentword[0].lower(), sentword[1], "stopword", "stopword", "stopword")
+            words.append(wordrow)
 
 
+words = [word for word in words if word[2] != "stopword"]
+freq = FreqDist(words)
+freqdict = dict(freq)
 
 # take out the stopwords
 words=[word for word in words if word not in _stopwords]
@@ -105,16 +115,19 @@ nlargest(10, freq, key=freq.get)
 # Output to a csv file
 #####################################
 # intialize the csv file with a heading
-outputfile = "/Users/jayers/Temp/freqdistwordsLinkedinStemmedPorter.csv"
+outputfile = "/Users/jayers/Temp/freqdistwordsLinkedinTuple.csv"
 with open(outputfile, "w") as myfile:
-    linestr = "Word1, Word2, Word3, Frequency, Class, Notes\n".format(k, v)
+    #linestr = "Word1, Word2, Word3, Frequency, Class, Notes\n".format(k, v)
+    linestr = '"Word","POS","Sense","Lem","Stem","Frequency","Class","Notes"\n'.format(k, v)
     myfile.write(linestr)
 
 # generate single word frequencies
 s = [(k, freqdict[k]) for k in sorted(freqdict, key=freqdict.get, reverse=True)]
-for k, v in s[:2000]:
+for k, v in s:
+    if v < 5:
+        break
     k, v
-    linestr = "{}, , , {}\n".format(k, v)
+    linestr = '"{}","{}","{}","{}","{}", {}\n'.format(k[0], k[1], k[2], k[3], k[4], v)
     with open(outputfile, "a") as myfile:
         myfile.write(linestr)
 

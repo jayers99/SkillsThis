@@ -148,19 +148,25 @@ job1 = jobs[0].select("div.jayers-job-title")
 type(job1)
 job1[0].text.strip()
 job1desc = jobs[0].select("div.jayers-job-desc")[0].text.strip()
-jobs[0].select("div.jayers-job-desc")[0].get_text(separator='\n')
+type(jobs[0].select("div.jayers-job-desc")[0].get_text(separator='\n'))
+jobsamp = jobs[0].select("div.jayers-job-desc")[0].get_text(separator='\n')
+import chardet
+chardet.detect(jobs[0].select("div.jayers-job-desc")[0].get_text(separator='\n'))
+''.join([i if ord(i) < 128 else ' ' for i in jobsamp])
 
 jobdescs = ""
 for i, job in enumerate(jobs):
     try:
         jobtitle = job.select("div.jayers-job-title")[0].text.strip()
         jobcompany = job.select("div.jayers-job-loc a")[0].text.strip()
-        jobdesc = job.select("div.jayers-job-desc")[0].get_text(separator='\n')
+        jobdescraw = job.select("div.jayers-job-desc")[0].get_text(separator='\n').replace("’", "'").replace("/", " ")
+        jobdesc = ''.join([i if ord(i) < 128 else ' ' for i in jobdescraw])
     except IndexError as ex:
         print("{}  index error".format(i))
     else:
         print("{}  {} - {}".format(i, jobtitle, jobcompany))
         jobdescs += jobdesc
+
 
 jobdescs
 

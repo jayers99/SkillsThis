@@ -27,7 +27,8 @@ for paragraph in paragraphs:
     sents += sent_tokenize(paragraph)
 
 # extract all the words
-_stopwords = set(stopwords.words('english') + list(punctuation))
+mycustomstopwords = ["'s", "'re", "'ll", "n't", "'ve", "'d", "us"]
+_stopwords = set(stopwords.words('english') + list(punctuation) + mycustomstopwords)
 
 lmtzr = WordNetLemmatizer()
 st = PorterStemmer()
@@ -118,7 +119,7 @@ nlargest(10, freq, key=freq.get)
 outputfile = "/Users/jayers/Temp/freqdistwordsLinkedinTuple.csv"
 with open(outputfile, "w") as myfile:
     #linestr = "Word1, Word2, Word3, Frequency, Class, Notes\n".format(k, v)
-    linestr = '"Word","POS","Sense","Lem","Stem","Frequency","Class","Notes"\n'.format(k, v)
+    linestr = '"Word","POS","Sense","Lem","Stem","Frequency"\n'.format(k, v)
     myfile.write(linestr)
 
 # generate single word frequencies
@@ -154,3 +155,24 @@ for k, v in s[:1000]:
     with open(outputfile, "a") as myfile:
         myfile.write(linestr)
 
+
+# convert my word class ground truth set from json to csv
+import csv
+import json
+
+# to create json from dictionary
+json_string = json.dumps(wordclassdict)
+# from json to dictionary
+wordclassdict = json.loads(json_string)
+# load json from file
+wordclassdict = {}
+with open('/Users/jayers/Dropbox/Code/SkillsThis/data/WordClassDict.json', 'r') as f:
+    wordclassdict = json.load(f)
+# write my dictionary back to json file
+with open('/Users/jayers/Dropbox/Code/SkillsThis/data/WordClassDict2.json', 'w') as f:
+    json.dump(wordclassdict, f)
+# convert my diction into csv file
+with open('/Users/jayers/Dropbox/Code/SkillsThis/data/WordClassDict.csv', 'w') as csv_file:
+    writer = csv.writer(csv_file)
+    for key, value in wordclassdict.items():
+       writer.writerow([key, value])

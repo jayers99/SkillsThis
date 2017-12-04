@@ -185,5 +185,5 @@
     "zabbix":"tool",
     "r":"tool.datascience",
     "matlab":"tool.datascience",
-    "dhcp":"tools.net"
+    "dhcp":"tool.net"
 }

@@ -119,7 +119,7 @@ nlargest(10, freq, key=freq.get)
 outputfile = "/Users/jayers/Temp/freqdistwordsLinkedinTuple.csv"
 with open(outputfile, "w") as myfile:
     #linestr = "Word1, Word2, Word3, Frequency, Class, Notes\n".format(k, v)
-    linestr = '"Word","POS","Sense","Lem","Stem","Frequency"\n'.format(k, v)
+    linestr = '"Word","POS","Sense","Lem","Stem","Frequency"\n'
     myfile.write(linestr)
 
 # generate single word frequencies

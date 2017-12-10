@@ -132,7 +132,42 @@ for k, v in s:
     with open(outputfile, "a") as myfile:
         myfile.write(linestr)
 
-# Add bigram frequencies
+
+# new bigram stuff taking into account complete sentences
+ngrams = list()
+for sent in sents:
+    sentwords = word_tokenize(sent)
+    sentwords = [word.lower() for word in sentwords if word.lower() not in _stopwords]
+    ngrams += nltk.bigrams(sentwords)
+    ngrams += nltk.trigrams(sentwords)
+
+print(ngrams)
+freq = FreqDist(ngrams)
+freqdict = dict(freq)
+print(freqdict)
+
+# output to a file
+outputfile = "/Users/jayers/Temp/FreqDistNgrams.csv"
+with open(outputfile, "w") as myfile:
+    linestr = '"Words","Frequency"\n'
+    myfile.write(linestr)
+
+# generate single word frequencies
+s = [(k, freqdict[k]) for k in sorted(freqdict, key=freqdict.get, reverse=True)]
+for k, v in s:
+    if v < 20:
+        break
+    k, v
+    linestr = '"{}",{}\n'.format(k, v)
+    with open(outputfile, "a") as myfile:
+        myfile.write(linestr)
+
+
+
+
+
+
+# OLD --- Add bigram frequencies
 from nltk.collocations import *
 #bigram_measures = nltk.collocations.BigramAssocMeasures()
 finderbi = BigramCollocationFinder.from_words(words)

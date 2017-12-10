@@ -144,6 +144,7 @@ page = open(fpath, encoding='utf-8', errors='ignore')
 soup = BeautifulSoup(page, 'html5lib')
 jobs = soup.select("div.jayers-job")
 
+# test things out on a single entry
 job1 = jobs[0].select("div.jayers-job-title")
 type(job1)
 job1[0].text.strip()
@@ -154,6 +155,7 @@ import chardet
 chardet.detect(jobs[0].select("div.jayers-job-desc")[0].get_text(separator='\n'))
 ''.join([i if ord(i) < 128 else ' ' for i in jobsamp])
 
+# loop through all jobs to create text to analyze
 jobdescs = ""
 for i, job in enumerate(jobs):
     try:

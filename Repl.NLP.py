@@ -1,3 +1,10 @@
+"""
+
+The file is full of a bunch of commands i was experimenting with analyzing text
+i pulled off linkedin.  It will NOT run as a complete program.
+
+"""
+
 # setup NLP env
 import nltk
 from nltk.tokenize import word_tokenize, sent_tokenize
@@ -162,7 +169,8 @@ for k, v in s:
     with open(outputfile, "a") as myfile:
         myfile.write(linestr)
 
-
+import sys
+sys.getsizeof(jobdescs)
 
 
 

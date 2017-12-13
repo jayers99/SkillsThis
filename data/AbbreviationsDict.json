@@ -26,5 +26,6 @@
     "cad":"computer aided design",
     "acl":"access control list",
     "acls":"access control lists",
-    "soc":"System and Organization Controls"
+    "soc":"system and organization controls",
+    "gce":"google compute engine"
 }

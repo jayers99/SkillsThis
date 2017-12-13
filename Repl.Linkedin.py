@@ -1,3 +1,10 @@
+"""
+
+The file is full of a bunch of commands i was experimenting with pulling data
+off the linkedin web site.  It will NOT run as a complete program.
+
+"""
+
 from selenium import webdriver
 from selenium.common import exceptions
 from selenium.webdriver.common.by import By

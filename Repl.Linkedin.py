@@ -4,47 +4,48 @@ The file is full of a bunch of commands i was experimenting with pulling data
 off the linkedin web site.  It will NOT run as a complete program.
 
 """
+# pylint: skip-file
 
+import time
+import sys
 from selenium import webdriver
 from selenium.common import exceptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
-import sys
 
 # setup the env
-browser = webdriver.Chrome("/Applications/chromedriver")
+BROWSER = webdriver.Chrome("/Applications/chromedriver")
 
 # loop through n number of job posting pages and build a list of job links
-thismanypages = 40
-currentpage = 0
-baseurl = "https://www.linkedin.com/jobs/search/?keywords=devops%20engineer&location=San%20Rafael%2C%20California&locationId=PLACES.us.7-1-0-21-22"
+THIS_MANY_PAGES = 40
+CURRENT_PAGE = 0
+BASE_URL = "https://www.linkedin.com/jobs/search/?keywords=devops%20engineer&location=San%20Rafael%2C%20California&locationId=PLACES.us.7-1-0-21-22"
 links = []
 
-while currentpage < thismanypages:
+while CURRENT_PAGE < THIS_MANY_PAGES:
     # create the url
-    if currentpage != 0:
-        startpara = "&start={}".format(currentpage*25)
+    if CURRENT_PAGE != 0:
+        startpara = "&start={}".format(CURRENT_PAGE*25)
     else:
         startpara = ""
-    url = "{0}{1}".format(baseurl, startpara)
+    url = "{0}{1}".format(BASE_URL, startpara)
     print(url)
-    browser.get(url)
+    BROWSER.get(url)
     time.sleep(4)
     # you must scroll to the bottom of the page for all the items to be loaded
-    windowheight = browser.get_window_size()['height']
-    innerheight = browser.execute_script("return window.innerHeight")
-    docheight = browser.execute_script("return document.body.scrollHeight")
+    windowheight = BROWSER.get_window_size()['height']
+    innerheight = BROWSER.execute_script("return window.innerHeight")
+    docheight = BROWSER.execute_script("return document.body.scrollHeight")
     scrollpos = 0
     while scrollpos < docheight:
         scrollpos += (innerheight - 100)
         scrollcmd = "window.scrollTo(0, " + str(scrollpos) + ");"
-        browser.execute_script(scrollcmd)
+        BROWSER.execute_script(scrollcmd)
         time.sleep(3)
-    linkselements = browser.find_elements_by_css_selector(".job-card-search__upper-content-wrapper-left a")
+    linkselements = BROWSER.find_elements_by_css_selector(".job-card-search__upper-content-wrapper-left a")
     links += [link.get_attribute("href") for link in linkselements]
-    currentpage += 1
+    CURRENT_PAGE += 1
 
 # save all those links off to a file
 print("{} links scraped".format(len(links)))
@@ -67,12 +68,12 @@ for link in links[800:1000]:
     print(link)
     try:
         # try to grab the page and extract the data i want
-        browser.get(link)
-        jobtitle = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
+        BROWSER.get(link)
+        jobtitle = WebDriverWait(BROWSER, 10).until(EC.presence_of_element_located((
             By.CSS_SELECTOR, ".jobs-details-top-card__content-container.mt6.pb5 h1")))
-        jobloc = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
+        jobloc = WebDriverWait(BROWSER, 10).until(EC.presence_of_element_located((
             By.CSS_SELECTOR, ".jobs-details-top-card__content-container.mt6.pb5 h3")))
-        jobdesc = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
+        jobdesc = WebDriverWait(BROWSER, 10).until(EC.presence_of_element_located((
             By.ID, "job-details")))
         jobtitlestr = jobtitle.get_attribute("innerHTML")
         joblocstr = jobloc.get_attribute("innerHTML")
@@ -107,14 +108,14 @@ for link in links[390:500]:
     print(link)
     try:
         # try to grab the page and extract the data i want
-        browser.get(link)
-        jobtitle = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
+        BROWSER.get(link)
+        jobtitle = WebDriverWait(BROWSER, 10).until(EC.presence_of_element_located((
             By.CSS_SELECTOR, "h1.title")))
-        jobcompany = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
+        jobcompany = WebDriverWait(BROWSER, 10).until(EC.presence_of_element_located((
             By.CSS_SELECTOR, "span.company")))
-        jobloc = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
+        jobloc = WebDriverWait(BROWSER, 10).until(EC.presence_of_element_located((
             By.CSS_SELECTOR, "h3.location")))
-        jobdesc = WebDriverWait(browser, 10).until(EC.presence_of_element_located((
+        jobdesc = WebDriverWait(BROWSER, 10).until(EC.presence_of_element_located((
             By.ID, "div.summary")))
         jobtitlestr = jobtitle.get_attribute("innerHTML")
         joblocstr = "{}{}".format(jobcompany.get_attribute("innerHTML"), jobloc.get_attribute("innerHTML"))

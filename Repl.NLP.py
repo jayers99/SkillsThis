@@ -4,6 +4,7 @@ The file is full of a bunch of commands i was experimenting with analyzing text
 i pulled off linkedin.  It will NOT run as a complete program.
 
 """
+# pylint: skip-file
 
 # setup NLP env
 import nltk

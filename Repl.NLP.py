@@ -49,22 +49,22 @@ for sent in sents:
     sentwords = word_tokenize(sent)
     sentwordsPOS = nltk.pos_tag(sentwords)
     for sentword in sentwordsPOS:
-        if sentword[0].lower() not in _stopwords:
-            if sentword[1][0].lower().replace("j", "a") in ("n", "v", "a", "r"):
-                sentwordsense = lesk(sentwords, sentword[0], sentword[1][0].lower().replace("j", "a"))
-            else:
-                sentwordsense = lesk(sentwords, sentword[0])
-            if sentwordsense is not None:
-                sentwordsense = str(sentwordsense).replace("Synset('", "").replace("')", "").lower()
-            sentwordlm = lmtzr.lemmatize(sentword[0])
-            sentwordst = st.stem(sentword[0])
-            #print(sentword[0], sentword[1], sentwordsense, sentwordlm, sentwordst)
-            wordrow = (sentword[0].lower(), sentword[1], sentwordsense, sentwordlm.lower(), sentwordst.lower())
-            words.append(wordrow)
+    if sentword[0].lower() not in _stopwords:
+        if sentword[1][0].lower().replace("j", "a") in ("n", "v", "a", "r"):
+            sentwordsense = lesk(sentwords, sentword[0], sentword[1][0].lower().replace("j", "a"))
         else:
-            #print(sentword[0], sentword[1], "stopword", "stopword", "stopword")
-            wordrow = (sentword[0].lower(), sentword[1], "stopword", "stopword", "stopword")
-            words.append(wordrow)
+            sentwordsense = lesk(sentwords, sentword[0])
+        if sentwordsense is not None:
+            sentwordsense = str(sentwordsense).replace("Synset('", "").replace("')", "").lower()
+        sentwordlm = lmtzr.lemmatize(sentword[0])
+        sentwordst = st.stem(sentword[0])
+        #print(sentword[0], sentword[1], sentwordsense, sentwordlm, sentwordst)
+        wordrow = (sentword[0].lower(), sentword[1], sentwordsense, sentwordlm.lower(), sentwordst.lower())
+        words.append(wordrow)
+    else:
+        #print(sentword[0], sentword[1], "stopword", "stopword", "stopword")
+        wordrow = (sentword[0].lower(), sentword[1], "stopword", "stopword", "stopword")
+        words.append(wordrow)
 
 
 words = [word for word in words if word[2] != "stopword"]

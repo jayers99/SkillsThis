@@ -1676,5 +1676,6 @@
     "zopl":"tool.lang",
     "zpl":"tool.lang",
     "zscaler":"tool.cloud",
-    "zsh":"tool.lang"
+    "zsh":"tool.lang",
+    "crontab":"tool.os"
 }

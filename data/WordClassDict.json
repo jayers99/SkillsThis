@@ -1516,7 +1516,6 @@
     "telcomp":"tool.lang",
     "tensorflow":"tool.datascience",
     "terraform":"tool.cfgmgt",
-    "terraform":"tool.ci/cd",
     "testing":"hs.delivery",
     "tests":"hs.delivery",
     "tex":"tool.lang",
